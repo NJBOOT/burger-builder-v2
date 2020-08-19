@@ -4,12 +4,8 @@ import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSumm
 import ContactData from "./ContactData/ContactData";
 
 class Checkout extends Component {
-  state = {
-    ingredients: null,
-    totalPrice: 0,
-  };
-
-  UNSAFE_componentWillMount() {
+  constructor(props) {
+    super(props);
     const query = new URLSearchParams(this.props.location.search).entries();
     const ingredients = {};
     let price = 0;
@@ -21,9 +17,15 @@ class Checkout extends Component {
         ingredients[key[0]] = +key[1];
       }
     }
-    console.log(ingredients, price);
-    this.setState({ ingredients: ingredients, totalPrice: price });
+    this.state = {
+      ingredients: ingredients,
+      totalPrice: price,
+    };
   }
+  state = {
+    ingredients: null,
+    totalPrice: 0,
+  };
 
   handleCheckoutCancel = () => {
     this.props.history.goBack();
@@ -56,3 +58,19 @@ class Checkout extends Component {
 }
 
 export default Checkout;
+
+// UNSAFE_componentWillMount() {
+//   const query = new URLSearchParams(this.props.location.search).entries();
+//   const ingredients = {};
+//   let price = 0;
+//   for (let key of query) {
+//     console.log(key);
+//     if (key[0] === "price") {
+//       price = +key[1];
+//     } else {
+//       ingredients[key[0]] = +key[1];
+//     }
+//   }
+//   console.log(ingredients, price);
+//   this.setState({ ingredients: ingredients, totalPrice: price });
+// }

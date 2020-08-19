@@ -3,13 +3,60 @@ import axios from "../../../axiosOrders";
 import classes from "./ContactData.module.css";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
+import Input from "../../../components/UI/Input/Input";
+
 class ContactData extends Component {
   state = {
-    name: "",
-    email: "",
-    address: {
-      street: "",
-      postalCode: "",
+    orderForm: {
+      name: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Your Name",
+        },
+        value: "",
+      },
+      street: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Your Street",
+        },
+        value: "",
+      },
+      zipCode: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Zip Code",
+        },
+        value: "",
+      },
+      country: {
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Country",
+        },
+        value: "",
+      },
+      email: {
+        elementType: "input",
+        elementConfig: {
+          type: "email",
+          placeholder: "Your Email",
+        },
+        value: "",
+      },
+      deliveryMethod: {
+        elementType: "select",
+        elementConfig: {
+          options: [
+            { value: "fastest", displayValue: "Fastest" },
+            { value: "cheapest", displayValue: "Cheapest" },
+          ],
+        },
+      },
     },
     loading: false,
   };
@@ -42,13 +89,36 @@ class ContactData extends Component {
         this.setState({ loading: false });
       });
   };
+
+  handleInputChange = (e, inputID) => {
+    const { value } = e.target;
+    const form = { ...this.state.orderForm };
+    const formEl = { ...form[inputID] };
+    formEl.value = value;
+    form[inputID] = formEl;
+    this.setState({
+      orderForm: form,
+    });
+  };
   render() {
+    const formElArray = [];
+    for (let key in this.state.orderForm) {
+      formElArray.push({
+        id: key,
+        config: this.state.orderForm[key],
+      });
+    }
     let form = (
       <form>
-        <input type="text" name="name" placeholder="Your Name" />
-        <input type="email" name="email" placeholder="Your Email" />
-        <input type="text" name="street" placeholder="Your Street" />
-        <input type="text" name="postal" placeholder="Your Postal Code" />
+        {formElArray.map(el => (
+          <Input
+            key={el.id}
+            elementType={el.config.elementType}
+            elementConfig={el.config.elementConfig}
+            value={el.config.value}
+            handleChange={e => this.handleInputChange(e, el.id)}
+          />
+        ))}
         <Button buttonType="Success" handleClick={this.handleOrder}>
           ORDER
         </Button>
