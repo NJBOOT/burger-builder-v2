@@ -23,6 +23,9 @@ class Orders extends Component {
       });
   }
   render() {
+    if (this.state.orders.length === 0) {
+      return <h1 style={{ textAlign: "center" }}>No Orders Found</h1>;
+    }
     return (
       <div>
         {this.state.orders.map(order => (

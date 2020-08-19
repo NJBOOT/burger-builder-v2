@@ -10,7 +10,6 @@ class Checkout extends Component {
     const ingredients = {};
     let price = 0;
     for (let key of query) {
-      console.log(key);
       if (key[0] === "price") {
         price = +key[1];
       } else {
